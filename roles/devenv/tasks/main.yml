@@ -1,3 +1,22 @@
+- name: Install Development Packages
+  become: true
+  become_user: root
+  block:
+  - name: Install C/C++ Deps
+    xbps:
+      name:
+        - gcc
+        - clang
+        - make
+
+  - name: Install Neovim Deps
+    xbps:
+      name:
+        - nodejs-lts
+        - curl
+        - tree-sitter
+        - tree-sitter-devel
+
 - name: Bootstrap Neovim Plugins
   block:
     - name: Install Packer
