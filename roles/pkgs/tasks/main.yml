@@ -1,0 +1,34 @@
+- name: Install desktop packages
+  become: true
+  become_user: root
+  block:
+    - name: Update Package Cache
+      xbps:
+        update_cache: true
+
+    - name: Upgrade Packages
+      xbps:
+        upgrade: true
+
+    - name: Install Neovim
+      xbps:
+        name:
+          - neovim
+
+    - name: Install Kitty
+      xbps:
+        name:
+          - kitty
+          - kitty-terminfo
+
+    - name: Install firefox
+      xbps:
+        name:
+          - firefox
+
+    - name: Install chezmoi
+      xbps:
+        name:
+          - chezmoi
+
+    

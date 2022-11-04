@@ -1,0 +1,19 @@
+- name: Git Setup
+  block:
+    - name: Set User Name
+      git_config:
+        name: user.name
+        scope: global
+        value: Freylint
+    - name: Set User Email
+      git_config:
+        name: user.email
+        scope: global
+        value: lmpriestley@tuta.io
+    - name: Set default branch
+      git_config:
+        name: init.defaultBranch
+        scope: global
+        value: main
+
+  

@@ -1,0 +1,9 @@
+# the host in which the playbook will be run
+- hosts: localhost
+  gather_facts: true
+  become: true
+  become_user: "{{ lookup('env', 'USER') }}"
+  roles:
+    - pkgs
+    - git
+    - devenv
