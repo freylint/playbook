@@ -14,7 +14,7 @@
       xbps:
         name:
           - neovim
-
+    # TODO move gui apps to desktop role
     - name: Install Kitty
       xbps:
         name:

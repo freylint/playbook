@@ -22,3 +22,36 @@
     - name: Install Packer
       shell: nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
+- name: Setup development workspace
+  block:
+    - name: Create workspace folder
+      block:
+        - name: Check for workspace folder
+          stat:
+            path: $HOME/workspace/
+          register: workspace_dir
+        - name: Create folder
+          file:
+            path: $HOME/workspace
+            state: directory
+            mode: 0755
+          when:
+            workspace_dir.stat.exists
+    - name: Update playbook repository
+      block:
+        - name: Collect playbook directory info
+          stat:
+            path: $HOME/workspace/playbook/
+          register: playbook_dir
+        - name: Clone playbook repo
+          git:
+            repo: git@github.com:freylint/playbook.git
+            dest: $HOME/workspace/
+          when: not playbook_dir.stat.exists
+        - name: Fast forward repo
+          git:
+            repo: git@github.com:freylint/playbook.git
+            dest: $HOME/workspace/
+            refspec: +refs/pull/*:refs/heads/*
+          when: playbook_dir.stat.exists
+
