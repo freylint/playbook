@@ -10,6 +10,7 @@
         - make
         - cmake
         - meson
+        - pkg-config
   - name: Install Rust Deps
     block:
       - name: Download Rustup
@@ -92,6 +93,7 @@
             dest: $HOME/workspace/freyground/
             refspec: +refs/pull/*:refs/heads/*
           when: git_freyground_dir.stat.exists
+          ignore_errors: true
         - name: Clone freyground repo
           ansible.builtin.git:
             repo: git@github.com:freylint/freyground.git
