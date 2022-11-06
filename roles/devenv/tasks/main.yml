@@ -81,8 +81,17 @@
             repo: git@github.com:freylint/playbook.git
             dest: $HOME/workspace/playbook/
           when: not git_playbook_dir.stat.exists
+
     - name: Update freyground repository
       block:
+        - name: Install/Update freyground dependency trunk
+          community.general.cargo:
+            name: trunk
+            state: latest
+        - name: Install/Update freyground dependency wasm-bindgen-cli
+          community.general.cargo:
+            name: wasm-bindgen-cli
+            state: latest
         - name: Collect freyground directory info
           ansible.builtin.stat:
             path: $HOME/workspace/freyground/
