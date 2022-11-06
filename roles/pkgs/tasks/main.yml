@@ -10,6 +10,12 @@
       xbps:
         upgrade: true
 
+    - name: Install ansible dependencies
+      ansible.builtin.xbps:
+        name:
+          - acl
+          - acl-progs
+
     - name: Install Neovim
       xbps:
         name:

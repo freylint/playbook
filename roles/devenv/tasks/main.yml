@@ -8,6 +8,26 @@
         - gcc
         - clang
         - make
+  - name: Install Rust Deps
+    block:
+      - name: Download Rustup
+        ansible.builtin.get_url:
+          url: https://sh.rustup.rs
+          dest: /tmp/rustup-init.sh
+          # TODO add checksum
+          mode: 0755
+      - name: Bootstrap Rustup
+        become: yes
+        become_user: "{{ ansible_user_id }}"
+        shell: /tmp/rustup-init.sh --default-toolchain nightly -y
+        vars:
+          allow_world_readable_tmpfiles: true
+      - name: Source the rustup env
+        become: yes
+        become_user: "{{ ansible_user_id }}"
+        shell: source $HOME/.cargo/env
+        args:
+          executable: /bin/bash
 
   - name: Install Neovim Deps
     community.general.xbps:
@@ -75,3 +95,4 @@
             repo: git@github.com:freylint/freyground.git
             dest: $HOME/workspace/freyground/
           when: not git_playbook_dir.stat.exists
+
