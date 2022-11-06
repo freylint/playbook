@@ -8,6 +8,8 @@
         - gcc
         - clang
         - make
+        - cmake
+        - meson
   - name: Install Rust Deps
     block:
       - name: Download Rustup
