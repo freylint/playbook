@@ -3,14 +3,14 @@
   become_user: root
   block:
   - name: Install C/C++ Deps
-    xbps:
+    community.general.xbps:
       name:
         - gcc
         - clang
         - make
 
   - name: Install Neovim Deps
-    xbps:
+    community.general.xbps:
       name:
         - nodejs-lts
         - curl
@@ -20,39 +20,41 @@
 - name: Bootstrap Neovim Plugins
   block:
     - name: Install Packer
-      shell:
+      ansible.builtin.command:
         nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+      changed_when: false
 
 - name: Setup development workspace
   block:
     - name: Create workspace folder
       block:
         - name: Check for workspace folder
-          stat:
+          ansible.builtin.stat:
             path: $HOME/workspace/
-          register: workspace_dir
+          register: git_proj_workspace_dir
         - name: Create folder
-          file:
+          ansible.builtin.file:
             path: $HOME/workspace
             state: directory
             mode: 0755
           when:
-            workspace_dir.stat.exists
+            git_proj_workspace_dir.stat.exists
     - name: Update playbook repository
       block:
         - name: Collect playbook directory info
-          stat:
+          ansible.builtin.stat:
             path: $HOME/workspace/playbook/
-          register: playbook_dir
+          register: git_playbook_dir
         - name: Fast forward repo
-          git:
+          ansible.builtin.git:
             repo: git@github.com:freylint/playbook.git
-            dest: $HOME/workspace/
+            dest: $HOME/workspace/playbook/
             refspec: +refs/pull/*:refs/heads/*
-          when: playbook_dir.stat.exists
+          when: git_playbook_dir.stat.exists
+          # Ignore errors due to failure if working tree is dirty
+          ignore_errors: true
         - name: Clone playbook repo
-          git:
+          ansible.builtin.git:
             repo: git@github.com:freylint/playbook.git
-            dest: $HOME/workspace/
-          when: not playbook_dir.stat.exists
-
+            dest: $HOME/workspace/playbook/
+          when: not git_playbook_dir.stat.exists
