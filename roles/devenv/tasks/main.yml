@@ -58,3 +58,20 @@
             repo: git@github.com:freylint/playbook.git
             dest: $HOME/workspace/playbook/
           when: not git_playbook_dir.stat.exists
+    - name: Update freyground repository
+      block:
+        - name: Collect freyground directory info
+          ansible.builtin.stat:
+            path: $HOME/workspace/freyground/
+          register: git_freyground_dir
+        - name: Fast forward repo
+          ansible.builtin.git:
+            repo: git@github.com:freylint/freyground.git
+            dest: $HOME/workspace/freyground/
+            refspec: +refs/pull/*:refs/heads/*
+          when: git_freyground_dir.stat.exists
+        - name: Clone freyground repo
+          ansible.builtin.git:
+            repo: git@github.com:freylint/freyground.git
+            dest: $HOME/workspace/freyground/
+          when: not git_playbook_dir.stat.exists
