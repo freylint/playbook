@@ -16,10 +16,12 @@
           - acl
           - acl-progs
 
-    - name: Install Neovim
+    - name: Install basic CLI Utils
       xbps:
         name:
           - neovim
+          - nushell
+
     # TODO move gui apps to desktop role
     - name: Install Kitty
       xbps:
